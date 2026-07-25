@@ -71,6 +71,20 @@ html[data-theme="light"] .cover{ background:linear-gradient(160deg,#1a2438 0%,#1
   padding:8px 16px;font-size:13px;background:rgba(201,162,39,.08);
 }
 .holder-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
+.saved-link-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-top:18px;padding:10px 14px;border-radius:10px;
+  background:rgba(201,162,39,.08);border:1px solid var(--line);
+}
+.saved-link-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold-soft);flex-shrink:0;}
+.saved-link-url{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--text-dark);
+  text-decoration:none;border-bottom:1px dotted var(--text-muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:120px;
+}
+.saved-link-url:hover{color:var(--gold-soft);border-bottom-color:var(--gold-soft);}
+.copy-btn{flex-shrink:0;font-size:12px;padding:6px 12px;}
+.copy-btn.copied{background:var(--teal);color:#fff;border-color:var(--teal);}
 .cover-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px;}
 .pill-btn{
   border:1px solid var(--line);background:transparent;color:var(--text-dark);
@@ -133,6 +147,13 @@ main{max-width:1320px;margin:0 auto;padding:24px 24px 80px;}
   border-radius:10px;box-shadow:var(--shadow);padding:10px;z-index:30;min-width:200px;max-height:240px;overflow:auto;display:none;
 }
 .multiselect-panel.open{display:block;}
+.panel-toggle-row{display:flex;gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--line);}
+.panel-toggle-btn{
+  flex:1;background:var(--panel-2);border:1px solid var(--line);color:var(--text-soft);
+  font-size:11px;padding:5px 6px;border-radius:6px;cursor:pointer;text-transform:none;letter-spacing:0;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+.panel-toggle-btn:hover{color:var(--gold);border-color:var(--gold);}
 .multiselect-panel label{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 4px;cursor:pointer;color:var(--text);text-transform:none;letter-spacing:0;}
 .multiselect-panel label span.swatch{width:9px;height:9px;border-radius:50%;display:inline-block;}
 .range-slider{display:flex;gap:8px;align-items:center;}
@@ -260,8 +281,13 @@ td{padding:8px 8px;border-bottom:1px solid var(--line);background:var(--panel);}
       <span id="holderName">No account holder loaded</span>
     </div>
   </div>
+  <div class="saved-link-row" id="savedLinkRow">
+    <span class="saved-link-label">Data source</span>
+    <a href="https://devgautam2000.github.io/expenses/data/" target="_blank" rel="noopener" id="savedLinkAnchor" class="saved-link-url">https://devgautam2000.github.io/expenses/data/</a>
+    <button class="pill-btn copy-btn" id="copyLinkBtn" type="button">Copy link</button>
+  </div>
   <div class="cover-controls">
-    <input type="text" id="urlInput" class="source-input" placeholder="https://raw.githubusercontent.com/you/repo/main/backup.json">
+    <input type="text" id="urlInput" class="source-input" placeholder="https://raw.githubusercontent.com/you/repo/main/backup.json" value="https://devgautam2000.github.io/expenses/data/">
     <button class="pill-btn" id="loadUrlBtn">Load from URL</button>
     <button class="pill-btn" id="loadFileBtn">Upload local file</button>
     <input type="file" id="fileInput" accept=".json">
@@ -473,6 +499,29 @@ document.getElementById('loadUrlBtn').addEventListener('click', () => {
   if(!url){ setStatus('Enter a URL first.', 'err'); return; }
   loadFromUrl(url);
 });
+document.getElementById('copyLinkBtn').addEventListener('click', () => {
+  const link = document.getElementById('savedLinkAnchor').href;
+  const btn = document.getElementById('copyLinkBtn');
+  const done = () => {
+    const original = 'Copy link';
+    btn.textContent = 'Copied ✓'; btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(done).catch(()=>{
+      fallbackCopy(link); done();
+    });
+  } else {
+    fallbackCopy(link); done();
+  }
+});
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+}
 document.getElementById('loadFileBtn').addEventListener('click', () => {
   document.getElementById('fileInput').click();
 });
@@ -610,18 +659,21 @@ function ingest(json){
 /* ============ Filter UI construction ============ */
 function buildFilterUI(){
   const acctPanel = document.getElementById('acctPanel'); acctPanel.innerHTML='';
+  acctPanel.appendChild(panelToggleRow(acctPanel));
   ACCOUNTS.filter(a=>!a.isExcluded).forEach(a=>{
     const lab = document.createElement('label');
     lab.innerHTML = `<input type="checkbox" value="${a.uuid}" checked><span class="swatch" style="background:${colorHex(a.color)}"></span>${a.name}`;
     acctPanel.appendChild(lab);
   });
   const catPanel = document.getElementById('catPanel'); catPanel.innerHTML='';
+  catPanel.appendChild(panelToggleRow(catPanel));
   CATEGORIES.forEach(c=>{
     const lab = document.createElement('label');
     lab.innerHTML = `<input type="checkbox" value="${c.uuid}" checked><span class="swatch" style="background:${colorHex(c.color)}"></span>${c.name}`;
     catPanel.appendChild(lab);
   });
   const peoplePanel = document.getElementById('peoplePanel'); peoplePanel.innerHTML='';
+  peoplePanel.appendChild(panelToggleRow(peoplePanel));
   PEOPLE.forEach(p=>{
     const lab = document.createElement('label');
     lab.innerHTML = `<input type="checkbox" value="${p.uuid}" checked><span class="swatch" style="background:${colorHex(p.color)}"></span>${p.name}`;
@@ -637,6 +689,25 @@ function buildFilterUI(){
     });
   });
   syncSetsFromUI();
+}
+function panelToggleRow(panel){
+  const row = document.createElement('div'); row.className = 'panel-toggle-row';
+  const selectAll = document.createElement('button');
+  selectAll.type='button'; selectAll.className='panel-toggle-btn'; selectAll.textContent='Select all';
+  const unselectAll = document.createElement('button');
+  unselectAll.type='button'; unselectAll.className='panel-toggle-btn'; unselectAll.textContent='Unselect all';
+  selectAll.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    panel.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=true);
+    syncSetsFromUI(); page=1; render();
+  });
+  unselectAll.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    panel.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=false);
+    syncSetsFromUI(); page=1; render();
+  });
+  row.appendChild(selectAll); row.appendChild(unselectAll);
+  return row;
 }
 function syncSetsFromUI(){
   filters.accounts = new Set([...document.querySelectorAll('#acctPanel input:checked')].map(i=>i.value));
