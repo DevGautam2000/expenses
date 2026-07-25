@@ -283,11 +283,11 @@ td{padding:8px 8px;border-bottom:1px solid var(--line);background:var(--panel);}
   </div>
   <div class="saved-link-row" id="savedLinkRow">
     <span class="saved-link-label">Data source</span>
-    <a href="https://devgautam2000.github.io/expenses/data/" target="_blank" rel="noopener" id="savedLinkAnchor" class="saved-link-url">https://devgautam2000.github.io/expenses/data/</a>
+    <a href="https://devgautam2000.github.io/expenses/latest/" target="_blank" rel="noopener" id="savedLinkAnchor" class="saved-link-url">https://devgautam2000.github.io/expenses/latest/</a>
     <button class="pill-btn copy-btn" id="copyLinkBtn" type="button">Copy link</button>
   </div>
   <div class="cover-controls">
-    <input type="text" id="urlInput" class="source-input" placeholder="https://raw.githubusercontent.com/you/repo/main/backup.json" value="https://devgautam2000.github.io/expenses/data/">
+    <input type="text" id="urlInput" class="source-input" placeholder="https://raw.githubusercontent.com/you/repo/main/backup.json" value="https://devgautam2000.github.io/expenses/latest/">
     <button class="pill-btn" id="loadUrlBtn">Load from URL</button>
     <button class="pill-btn" id="loadFileBtn">Upload local file</button>
     <input type="file" id="fileInput" accept=".json">
@@ -495,7 +495,7 @@ function setStatus(msg, cls){
 
 /* ============ Data loading ============ */
 document.getElementById('loadUrlBtn').addEventListener('click', () => {
-  const url = document.getElementById('urlInput').value.trim();
+  const url = "https://devgautam2000.github.io/expenses/latest/"//document.getElementById('urlInput').value.trim();
   if(!url){ setStatus('Enter a URL first.', 'err'); return; }
   loadFromUrl(url);
 });
