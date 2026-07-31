@@ -161,7 +161,7 @@ def main():
     dest.mkdir(parents=True, exist_ok=True)
 
     app_data_dest = Path(get_env("APP_DATA_LOADING_PATH"))
-    app_data_dest.mkdir(parents=True, exist_ok=True)
+    #app_data_dest.mkdir(parents=True, exist_ok=True)
 
     service = build_drive_service()
     drive_files = list_drive_files(service, folder_id)
