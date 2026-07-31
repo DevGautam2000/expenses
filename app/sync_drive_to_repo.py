@@ -183,7 +183,9 @@ def main():
         dt = datetime.fromisoformat(f.get("modifiedTime").replace("Z", "+00:00"))
         month_name = dt.strftime("%B")
         year = dt.year
-        target_path = dest / month_name / f"{year}" / f"{local_name}_v{manifest_count}"
+        target_dir = dest / month_name / f"{year}"
+        target_path =  target_dir / f"{local_name}_v{manifest_count}"
+        PATH(target_dir).mkdir(parents=True, exist_ok=True)
         
         try:
             if export_mime:
