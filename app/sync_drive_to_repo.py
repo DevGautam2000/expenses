@@ -185,7 +185,7 @@ def main():
         year = dt.year
         target_dir = dest / month_name / f"{year}"
         target_path =  target_dir / f"{local_name}_v{manifest_count}"
-        PATH(target_dir).mkdir(parents=True, exist_ok=True)
+        Path(target_dir).mkdir(parents=True, exist_ok=True)
         
         try:
             if export_mime:
