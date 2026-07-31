@@ -140,7 +140,7 @@ def load_json(path: Path) -> dict:
 
 def dump_json(dest: Path, new_content: dict):
     dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(json.dumps(new_content, indent=2, sort_keys=True))
+    dest.write_text(json.dumps(new_content))
 
 
 def save_manifest(dest: Path, manifest: dict):
