@@ -17,9 +17,11 @@ get exported (default: Docs->docx, Sheets->xlsx, Slides->pptx). You can change
 EXPORT_MIME_MAP below if you'd rather export as PDF, etc.
 
 Required environment variables:
-  GDRIVE_SA_KEY_JSON   - full JSON contents of the service account key
-  GDRIVE_FOLDER_ID      - the Drive folder ID to watch
-  DEST_PATH             - path inside this repo to sync files into (e.g. "data/incoming")
+  GDRIVE_SA_KEY_JSON     - full JSON contents of the service account key
+  GDRIVE_FOLDER_ID       - the Drive folder ID to watch
+  DEST_PATH              - path inside this repo to sync files into (e.g. "data/incoming")
+  APP_DATA_LOADING_PATH  - path to a single JSON file that gets overwritten with
+                            the content of the newest new file found each run
 
 Exit behavior:
   Prints a summary. Leaves changed files staged in the filesystem; the calling
@@ -98,7 +100,15 @@ def list_drive_files(service, folder_id: str):
     while True:
         resp = (
             service.files()
-            .list(q=query, fields=fields, pageToken=page_token, pageSize=200)
+            .list(
+                q=query,
+                fields=fields,
+                pageToken=page_token,
+                pageSize=200,
+                supportsAllDrives=True,
+                includeItemsFromAllDrives=True,
+                corpora="allDrives",
+            )
             .execute()
         )
         files.extend(resp.get("files", []))
@@ -114,22 +124,32 @@ def load_manifest(dest: Path) -> dict:
         return json.loads(manifest_path.read_text())
     return {}
 
-def load_json(dest: Path) -> dict:
-    if dest.exists():
-        return json.load(dest)
-    return {}
 
-def dump_json(dest: str,new_content):
-  with open(dest, "w") as f:
-    json.dump(new_content, f)
-    
+def load_json(path: Path) -> dict:
+    """Read and parse a JSON file from disk. Returns {} if it doesn't exist
+    or isn't valid JSON (with a warning printed for the latter)."""
+    if not path.exists():
+        print(f"WARN: expected JSON file not found: {path}", file=sys.stderr)
+        return {}
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as e:
+        print(f"WARN: {path} is not valid JSON, skipping app-data update: {e}", file=sys.stderr)
+        return {}
+
+
+def dump_json(dest: Path, new_content: dict):
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(json.dumps(new_content, indent=2, sort_keys=True))
+
+
 def save_manifest(dest: Path, manifest: dict):
     manifest_path = dest / MANIFEST_NAME
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
 
 
 def download_binary(service, file_id: str, dest_file: Path):
-    request = service.files().get_media(fileId=file_id)
+    request = service.files().get_media(fileId=file_id, supportsAllDrives=True)
     buf = io.BytesIO()
     downloader = MediaIoBaseDownload(buf, request)
     done = False
@@ -161,7 +181,6 @@ def main():
     dest.mkdir(parents=True, exist_ok=True)
 
     app_data_dest = Path(get_env("APP_DATA_LOADING_PATH"))
-    #app_data_dest.mkdir(parents=True, exist_ok=True)
 
     service = build_drive_service()
     drive_files = list_drive_files(service, folder_id)
@@ -195,9 +214,10 @@ def main():
         month_name = dt.strftime("%B")
         year = dt.year
         target_dir = dest / month_name / f"{year}"
-        target_path =  target_dir / f"{local_name}_v{manifest_count}"
-        Path(target_dir).mkdir(parents=True, exist_ok=True)
-        
+        target_filename = f"{local_name}_v{manifest_count}.json"
+        target_path = target_dir / target_filename
+        target_dir.mkdir(parents=True, exist_ok=True)
+
         try:
             if export_mime:
                 download_export(service, file_id, export_mime, target_path)
@@ -208,17 +228,21 @@ def main():
             continue
 
         manifest[file_id] = {
-            "name": local_name,
+            "name": target_filename,
             "changeKey": change_key,
             "modifiedTime": f.get("modifiedTime"),
         }
 
         if is_new:
             new_count += 1
-            new_data = load_json(Path(f"{target_path}.json"))
-            dump_json(app_data_dest, new_data)
-            # replace the existing index.json file with the new file
-            print(f"NEW: {local_name}")
+            # target_path is already the file we just downloaded/wrote —
+            # no extra ".json" suffix needed here.
+            new_data = load_json(target_path)
+            if new_data:
+                dump_json(app_data_dest, new_data)
+                print(f"NEW: {local_name} -> app data updated at {app_data_dest}")
+            else:
+                print(f"NEW: {local_name} (not valid JSON, app data left unchanged)")
         else:
             updated_count += 1
             print(f"UPDATED: {local_name}")
