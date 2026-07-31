@@ -23,7 +23,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r app/requirements.txt
 
       - name: Run Drive sync
         id: sync
@@ -37,7 +37,7 @@ jobs:
           GDRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.GDRIVE_OAUTH_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
           DEST_PATH: "data/incoming"   # <-- change to your repo's destination folder
-        run: python sync_drive_to_repo.py
+        run: python app/sync_drive_to_repo.py
 
       - name: Commit and push if changed
         if: steps.sync.outputs.changed == 'true'
