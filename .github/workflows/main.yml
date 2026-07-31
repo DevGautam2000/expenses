@@ -37,7 +37,7 @@ jobs:
           GDRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.GDRIVE_OAUTH_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
           DEST_PATH: "data/incoming" 
-          APP_DATA_LOADING_PATH: "latest"
+          APP_DATA_LOADING_PATH: "latest/index.json"
         run: python app/sync_drive_to_repo.py
 
       - name: Commit and push if changed
