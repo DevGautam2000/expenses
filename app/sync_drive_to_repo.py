@@ -114,7 +114,15 @@ def load_manifest(dest: Path) -> dict:
         return json.loads(manifest_path.read_text())
     return {}
 
+def load_json(dest: Path) -> dict:
+    if dest.exists():
+        return json.load(dest)
+    return {}
 
+def dump_json(dest: str,new_content):
+  with open(dest, "w") as f:
+    json.dump(new_content, f)
+    
 def save_manifest(dest: Path, manifest: dict):
     manifest_path = dest / MANIFEST_NAME
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
@@ -151,6 +159,9 @@ def main():
     folder_id = get_env("GDRIVE_FOLDER_ID")
     dest = Path(get_env("DEST_PATH"))
     dest.mkdir(parents=True, exist_ok=True)
+
+    app_data_dest = Path(get_env("APP_DATA_LOADING_PATH"))
+    app_data_dest.mkdir(parents=True, exist_ok=True)
 
     service = build_drive_service()
     drive_files = list_drive_files(service, folder_id)
@@ -204,6 +215,9 @@ def main():
 
         if is_new:
             new_count += 1
+            new_data = load_json(f"{target_path}.json")
+            dump_json(app_data_dest, new_data)
+            # replace the existing index.json file with the new file
             print(f"NEW: {local_name}")
         else:
             updated_count += 1
