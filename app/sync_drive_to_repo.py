@@ -30,6 +30,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from datetime import datetime
 
 from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials as UserCredentials
@@ -157,6 +158,7 @@ def main():
 
     new_count = 0
     updated_count = 0
+    manifest_count = len(manifest) + 1
 
     for f in drive_files:
         file_id = f["id"]
@@ -178,7 +180,11 @@ def main():
         if not (is_new or is_updated):
             continue
 
-        target_path = dest / local_name
+        dt = datetime.fromisoformat(f.get("modifiedTime").replace("Z", "+00:00"))
+        month_name = dt.strftime("%B")
+        year = dt.year
+        target_path = dest / month_name / year / f"{local_name}_v{manifest_count}"
+        
         try:
             if export_mime:
                 download_export(service, file_id, export_mime, target_path)
