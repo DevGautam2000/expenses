@@ -41,6 +41,9 @@ jobs:
         run: python app/sync_drive_to_repo.py
 
       - name: Commit and push if changed
+        env:
+          DEST_PATH: "data/incoming" 
+          APP_DATA_LOADING_PATH: "latest/index.json"
         if: steps.sync.outputs.changed == 'true'
         run: |
           git config user.name "gdrive-sync-bot"
