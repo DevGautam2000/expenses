@@ -215,7 +215,7 @@ def main():
 
         if is_new:
             new_count += 1
-            new_data = load_json(f"{target_path}.json")
+            new_data = load_json(Path(f"{target_path}.json"))
             dump_json(app_data_dest, new_data)
             # replace the existing index.json file with the new file
             print(f"NEW: {local_name}")
