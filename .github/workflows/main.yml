@@ -1,0 +1,49 @@
+name: Sync Google Drive folder to repo
+
+on:
+  schedule:
+    # Every 15 minutes. Adjust to taste — GitHub's cron has a few minutes of
+    # inherent jitter/delay, so don't rely on this for sub-minute freshness.
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Drive sync
+        id: sync
+        env:
+          # Use ONE of these two auth methods — leave the other's secrets unset.
+          # Option A: service account
+          GDRIVE_SA_KEY_JSON: ${{ secrets.GDRIVE_SA_KEY_JSON }}
+          # Option B: your personal Google account via OAuth
+          GDRIVE_OAUTH_CLIENT_ID: ${{ secrets.GDRIVE_OAUTH_CLIENT_ID }}
+          GDRIVE_OAUTH_CLIENT_SECRET: ${{ secrets.GDRIVE_OAUTH_CLIENT_SECRET }}
+          GDRIVE_OAUTH_REFRESH_TOKEN: ${{ secrets.GDRIVE_OAUTH_REFRESH_TOKEN }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+          DEST_PATH: "data/incoming"   # <-- change to your repo's destination folder
+        run: python sync_drive_to_repo.py
+
+      - name: Commit and push if changed
+        if: steps.sync.outputs.changed == 'true'
+        run: |
+          git config user.name "gdrive-sync-bot"
+          git config user.email "actions@github.com"
+          git add "${DEST_PATH:-data/incoming}"
+          git commit -m "Sync new/updated files from Google Drive"
+          git push
