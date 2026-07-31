@@ -260,7 +260,8 @@
         "c9e1cdea-f841-4a49-85fb-6d019dfe9212",
         "24b9136a-6704-433e-8dbd-a4939535a207",
         "fd275daf-ee59-4c3a-a1a1-9b13ff482795",
-        "62c100fe-c5ef-4845-93c8-493fd14e969d"
+        "62c100fe-c5ef-4845-93c8-493fd14e969d",
+        "0c7dfb49-fce7-48d9-961a-15777be5c643"
       ],
       "type": 2,
       "updatedAt": "2026-07-26T01:47:23.920",
@@ -311,7 +312,8 @@
         "7c7b84f5-367d-47ed-a668-136be31f5253",
         "0e517b6a-f1e6-4926-b2a3-de6c7bec50cc",
         "884e0989-d593-4fb4-9e6c-67f9f262aa95",
-        "1d119d99-81a9-4cd6-b620-77cc7be9a788"
+        "1d119d99-81a9-4cd6-b620-77cc7be9a788",
+        "e5a148af-88c7-4ab4-a04b-ccfc0427e466"
       ],
       "type": 0,
       "updatedAt": "2026-07-26T01:52:12.209",
@@ -699,7 +701,7 @@
       "createdAt": "2026-07-04T00:25:08.324",
       "id": 1,
       "key": "transaction_first",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": "2026-07-04T00:25:08.324",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "7731f479-b22b-41b3-9d1d-7b63d10b370b"
@@ -709,7 +711,7 @@
       "createdAt": "2026-07-04T00:25:08.325",
       "id": 2,
       "key": "transaction_5",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": "2026-07-04T00:30:56.910",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "111228cd-45b0-437c-81fe-dff16f4b10a5"
@@ -719,7 +721,7 @@
       "createdAt": "2026-07-04T00:25:08.325",
       "id": 3,
       "key": "transaction_10",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": "2026-07-04T00:35:25.927",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "774fd723-6d4a-4f19-accf-15cdec2c81c8"
@@ -729,7 +731,7 @@
       "createdAt": "2026-07-04T00:25:08.325",
       "id": 4,
       "key": "transaction_50",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": "2026-07-08T22:22:25.320",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "fcd128db-fa03-4dee-85e8-e2321b0b41ce"
@@ -739,7 +741,7 @@
       "createdAt": "2026-07-04T00:25:08.325",
       "id": 5,
       "key": "transaction_100",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": "2026-07-16T22:56:25.033",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "db131c6d-002b-4429-a883-de69f1af1bea"
@@ -749,7 +751,7 @@
       "createdAt": "2026-07-04T00:25:08.325",
       "id": 6,
       "key": "transaction_1000",
-      "progress": 229,
+      "progress": 231,
       "unlockedAt": null,
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "8c4b75be-d572-4bf8-a941-a05bc4db40b9"
@@ -1015,7 +1017,9 @@
         "fb67e649-5408-449e-b57d-cd6b254742f4",
         "884e0989-d593-4fb4-9e6c-67f9f262aa95",
         "1d119d99-81a9-4cd6-b620-77cc7be9a788",
-        "62c100fe-c5ef-4845-93c8-493fd14e969d"
+        "62c100fe-c5ef-4845-93c8-493fd14e969d",
+        "0c7dfb49-fce7-48d9-961a-15777be5c643",
+        "e5a148af-88c7-4ab4-a04b-ccfc0427e466"
       ],
       "type": 0,
       "updatedAt": "2026-07-03T23:40:37.736",
@@ -1504,7 +1508,8 @@
         "884e0989-d593-4fb4-9e6c-67f9f262aa95",
         "1d119d99-81a9-4cd6-b620-77cc7be9a788",
         "2f97ace8-357a-4830-af38-7e162ac5e7a3",
-        "dd75eecf-ac1b-4e41-b6ef-a03d3370199e"
+        "dd75eecf-ac1b-4e41-b6ef-a03d3370199e",
+        "e5a148af-88c7-4ab4-a04b-ccfc0427e466"
       ],
       "updatedAt": "2026-07-08T15:50:33.211",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
@@ -1549,7 +1554,8 @@
         "c9e1cdea-f841-4a49-85fb-6d019dfe9212",
         "24b9136a-6704-433e-8dbd-a4939535a207",
         "fd275daf-ee59-4c3a-a1a1-9b13ff482795",
-        "62c100fe-c5ef-4845-93c8-493fd14e969d"
+        "62c100fe-c5ef-4845-93c8-493fd14e969d",
+        "0c7dfb49-fce7-48d9-961a-15777be5c643"
       ],
       "updatedAt": "2026-07-08T15:50:15.245",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
@@ -7187,19 +7193,19 @@
       "createdAt": "2026-07-30T23:33:38.000",
       "description": "",
       "exchangeRate": null,
-      "expiryDateTime": "2026-08-01T00:41:50.127",
+      "expiryDateTime": "2026-08-01T01:04:32.324",
       "fromAccount": "2b9af0c9-8855-4666-9be1-4c781d9f1ec3",
       "id": 222,
       "image": null,
       "loan": null,
-      "name": "Dipen ko dia",
+      "name": "Ghar pe cash",
       "people": null,
       "place": null,
       "recurring": null,
       "tags": [],
-      "toAccount": "18110823-8fe5-4547-b1d3-8dbd2cc5b2e3",
+      "toAccount": "8cedd8c1-7bcb-4b94-be6b-e72b888f1084",
       "type": 2,
-      "updatedAt": "2026-08-01T00:41:50.127",
+      "updatedAt": "2026-08-01T01:04:32.324",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "43335194-c401-426c-815e-552109395c97"
     },
@@ -7427,6 +7433,56 @@
       "updatedAt": "2026-08-01T00:46:31.019",
       "user": "814248de-0f8d-4712-bd00-91d12164a414",
       "uuid": "62c100fe-c5ef-4845-93c8-493fd14e969d"
+    },
+    {
+      "account": "18110823-8fe5-4547-b1d3-8dbd2cc5b2e3",
+      "amount": 133.0,
+      "baseExchangeRate": null,
+      "budget": null,
+      "category": "892419eb-083b-410f-b146-1f3c70914aa1",
+      "createdAt": "2026-07-31T23:52:23.000",
+      "description": "",
+      "exchangeRate": null,
+      "expiryDateTime": "2026-08-01T00:53:10.693",
+      "fromAccount": null,
+      "id": 232,
+      "image": null,
+      "loan": null,
+      "name": "Expense",
+      "people": "ca7539c0-14da-430a-ae59-44fee8b96222",
+      "place": null,
+      "recurring": null,
+      "tags": [],
+      "toAccount": null,
+      "type": 0,
+      "updatedAt": "2026-08-01T00:53:10.693",
+      "user": "814248de-0f8d-4712-bd00-91d12164a414",
+      "uuid": "0c7dfb49-fce7-48d9-961a-15777be5c643"
+    },
+    {
+      "account": "8cedd8c1-7bcb-4b94-be6b-e72b888f1084",
+      "amount": 133.0,
+      "baseExchangeRate": null,
+      "budget": null,
+      "category": "892419eb-083b-410f-b146-1f3c70914aa1",
+      "createdAt": "2026-07-30T01:04:50.000",
+      "description": "",
+      "exchangeRate": null,
+      "expiryDateTime": "2026-08-01T01:05:34.940",
+      "fromAccount": null,
+      "id": 233,
+      "image": null,
+      "loan": null,
+      "name": "Expense",
+      "people": "7214a9a0-5619-49f8-8521-181d4faf1190",
+      "place": null,
+      "recurring": null,
+      "tags": [],
+      "toAccount": null,
+      "type": 0,
+      "updatedAt": "2026-08-01T01:05:34.940",
+      "user": "814248de-0f8d-4712-bd00-91d12164a414",
+      "uuid": "e5a148af-88c7-4ab4-a04b-ccfc0427e466"
     }
   ],
   "users": [
