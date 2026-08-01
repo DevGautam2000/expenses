@@ -1,0 +1,58 @@
+name: Dump excel for latest deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      output_name:
+        description: 'Base name for the output file (no extension)'
+        required: false
+        default: 'backup'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Compute output path
+        id: vars
+        run: |
+          MONTH=$(date +%B)
+          YEAR=$(date +%Y)
+          DATE=$(date +%Y-%m-%d)
+          OUT_DIR="data/generated/${MONTH}/${YEAR}"
+          mkdir -p "$OUT_DIR"
+          OUT_FILE="${OUT_DIR}/${{ inputs.output_name }}_${DATE}.xlsx"
+          echo "out_file=$OUT_FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Verify input file exists
+        run: |
+          if [ ! -f "latest/index.json" ]; then
+            echo "::error::latest/index.json not found in repo"
+            exit 1
+          fi
+
+      - name: Run conversion script
+        run: python app/backup_to_xlsx.py latest/index.json "${{ steps.vars.outputs.out_file }}"
+
+      - name: Commit generated file
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: add generated report ${{ steps.vars.outputs.out_file }}"
+          file_pattern: "data/generated/**"
+
+      - name: Upload as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.output_name }}-xlsx
+          path: ${{ steps.vars.outputs.out_file }}
